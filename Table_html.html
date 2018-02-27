@@ -52,7 +52,7 @@
 	    <footer class="footer">
 	      <div class="container">
 	      	<p>Control Panel</p>
-	        <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a></p>
+	        <p><a href="/tables" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a></p>
 	      </div>
 	    </footer>
 
@@ -62,99 +62,35 @@
 <script type="text/javascript">
 
 	function displayReservations () {
-      $.get("/api/", function(data) {
+      $.get("/api/reservations", function(data) {
       	for (var i = 0; i < data.length; i++) {
           console.log(data);
-          $("#tableSection").show();
-          var newRes = $("<div>");
-          newRes.append(data[i].name + "\n" + data[i].phone_number  + "\n" + data[i].email + "\n" + data[i].id)
-          $("#tableSection").append(newRes)
+          if (i < 5) {
+	          $("#tableSection").show();
+	          var newRes = $("<div>");
+	          newRes.append(data[i].name + "\n" + data[i].phone_number  + "\n" + data[i].email + "\n" + data[i].id)
+	          $("#tableSection").append(newRes)
+	      } else {
+	          console.log(data);
+	          $("#waitlistSection").show();
+	          var newWait = $("<div>");
+	          var name = $("<div>" + data[i].name + "</div>");
+	          newWait.append(name, data[i].phone_number, data[i].email, data[i].id)
+	          $("#waitlistSection").append(newWait)
+          }
         }
-
       })
     }
 
-    // function displayWaitlist () {
-    //   $.get("/api/", function(data) {
-    //   	for (var i = 0; i < data.length; i++) {
-    //       console.log(data);
-    //       $("#tableSection").show();
-    //       var newRes = $("<div>");
-    //       newRes.append(data[i].name + "\n" + data[i].phone_number  + "\n" + data[i].email + "\n" + data[i].id)
-    //       $("#tableSection").append(newRes)
-    //     }
-
-    //   })
-    // }
+    $("#clear").click(function() {
+    	var currentURL = window.location.origin;
+	    $.post(currentURL + "/api/clear", function(data){
+	    	console.log("Reservations cleared")
+    	})
+    })
 
     displayReservations()
-    // displayWaitlist()
 
-
-// 	function runTableQuery(){
-// 		var currentURL = window.location.origin;
-// 		$.ajax({url: currentURL + "/api/tables", method: "GET"})
-// 			.done(function(tableData) {
-// 					$("#tableSection").empty();
-// 					$("#waitlistSection").empty();
-				
-// 				for (var i = 0; i < tableData.length && i < 5; i++){
-				
-// 					var tableSection = $("<div>");
-// 					tableSection.addClass('well');
-// 					tableSection.attr('id', 'tableWell-' + i+1)
-// 					$('#tableSection').append(tableSection);
-// 					var tableNumber = i + 1;
-					
-// 					$("#tableWell-"+ i+1).append('<h2><button id="' + i + '" class="label label-danger clearReservation">X</button> <span class="label label-primary">' + tableNumber + "</span> " + tableData[i].name + "</h2>");
-// 				}
-				
-// 				if (tableData.length > 4) {
-// 					runWaitListQuery(tableData);
-// 				}
-// 			});
-// 	}
-// 	function runWaitListQuery(tableData){
-				
-// 				for (var i=5; i < tableData.length; i++){
-					
-// 					var waitlistSection = $("<div>");
-// 					waitlistSection.addClass('well');
-// 					waitlistSection.attr('id', 'waitlistWell-' + i+1)
-// 					$('#waitlistSection').append(waitlistSection);
-// 					var tableNumber = i + 1;
-					
-// 					$("#waitlistWell-"+ i+1).append('<h2><span class="label label-primary">' + tableNumber + "</span> | " + tableData[i].name + "</h2>");
-// 				}
-// 	}
-	
-// 	function clearTable(){
-// 		console.log("clearing table");
-// 		var currentURL = window.location.origin;
-// 		$.ajax({url: currentURL + "/api/clear", method: "POST"})
-// 	}
-// $(document).on('click', ".clearReservation", function(){
-// 	var idToDelete = $(this).attr("id");
-// 	var killObject = {"id": idToDelete};
-// 	var currentURL = window.location.origin;
-// 	$.ajax({
-// 	  method: "POST",
-// 	  url: currentURL + "/api/killreservation",
-// 	  data: {"id": idToDelete}
-// 	})
-// 	  .done(function( tables ) {
-// 	  	$(this).remove();
-// 	  	console.log(tables);
-// 	  	runTableQuery();
-// 	  });
-// })
-// 	$("#clear").on('click', function(){
-// 		clearTable();
-	
-// 		location.reload();
-// 	})
-	
-// 	runTableQuery();
 </script>
 
 

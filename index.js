@@ -14,18 +14,10 @@ var PORT = 3000;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Star Wars Characters (DATA)
 // =============================================================
-var reservations = [
-  {
-    name: "Yoda",
-    phone_number: 5555555555,
-    email: "JediMaster@gmail.com",
-    id: "Yoda"
-  }
-];
+var reservations = [];
 
-var waitingList = [];
+// var waitingList = [];
 
 // Routes
 // =============================================================
@@ -47,14 +39,7 @@ app.get("/api/:reservations?", function(req, res) {
   return res.json(reservations);
 });
 
-// Get all characters
-// app.get("/tables", function(req, res) {
-//   res.json(reservations, waitingList);
-// });
-
 app.post("/api/new", function(req, res) {
-
-  if (reservations.length < 2) {
 
     var newReservation = req.body;
 
@@ -65,18 +50,13 @@ app.post("/api/new", function(req, res) {
     res.json(newReservation);
 
     console.log(reservations)
-  } else {
 
-    var newReservation = req.body;
+});
 
-    console.log(newReservation);
 
-    waitingList.push(newReservation);
+app.post("/api/clear", function(req, res) {
 
-    res.json(waitingList);
-
-    console.log(waitingList)
-  }
+    reservations.splice(0)
 });
 
 
